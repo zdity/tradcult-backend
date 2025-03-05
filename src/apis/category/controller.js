@@ -46,6 +46,14 @@ async function remove(req, res) {
       .end();
   };
 
+  const hasProducts = await Product.findOne({ category: id });
+
+  if (hasProducts) {
+    return res
+      .status(400)
+      .end();
+  };
+
   await Category.deleteOne({ _id: id });
 
   return res
