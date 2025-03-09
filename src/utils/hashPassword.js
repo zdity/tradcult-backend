@@ -6,7 +6,7 @@ export default function (password, salt = randomBytes(16).toString("hex")) {
     salt,
     1000,
     64,
-    "sha512",
+    "sha256",
     (_, key) => key,
   ).toString("hex");
 

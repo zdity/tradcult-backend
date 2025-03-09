@@ -8,16 +8,7 @@ const schema = new Schema({
 });
 
 schema.pre("save", function (next) {
-  const { email, password } = this;
-
-  const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w]{2,}$/;
-  const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
-
-  if (!emailRegex.test(email) || !passwordRegex.test(password)) {
-    throw new Error();
-  };
-
-  const { salt, hash } = hashPassword(password);
+  const { salt, hash } = hashPassword(this.password);
   this.password = `${salt}.${hash}`;
 
   next();

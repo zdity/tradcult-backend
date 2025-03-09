@@ -1,3 +1,5 @@
+import jwt from "jsonwebtoken";
+
 import { User } from "#models";
 
 import { hashPassword } from "#utils";
@@ -7,6 +9,15 @@ export default async function(req, res) {
   email = email.toLowerCase();
 
   if (!email || !password) {
+    return res
+      .status(400)
+      .end();
+  };
+
+  const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w]{2,}$/;
+  const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
+
+  if (!emailRegex.test(email) || !passwordRegex.test(password)) {
     return res
       .status(400)
       .end();
@@ -25,20 +36,18 @@ export default async function(req, res) {
     };
 
   } else {
-    try {
-      user = await User.create({
-        email,
-        password
-      });
-
-    } catch {
-      return res
-        .status(400)
-        .end();
-    };
+    user = await User.create({
+      email,
+      password
+    });
   };
+
+  const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
+    algorithm: "HS256",
+    expiresIn: "1d"
+  });
 
   return res
     .status(200)
-    .json(user);
+    .json(token);
 };
