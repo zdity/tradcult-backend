@@ -3,6 +3,7 @@
   "imports": {
     "#config/*": "./config/*",
     "#models": "./src/models/index.js",
+    "#middlewares": "./src/middlewares/index.js",
     "#utils": "./src/utils/index.js"
   },
   "scripts": {

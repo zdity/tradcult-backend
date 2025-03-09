@@ -1,5 +1,7 @@
 import { Router } from "express";
 
+import { isAdmin } from "#middlewares";
+
 import {
   create,
   update,
@@ -8,8 +10,8 @@ import {
 
 const api = Router();
 
-api.post("/", create);
-api.put("/:id", update);
-api.delete("/:id", remove);
+api.post("/", isAdmin, create);
+api.put("/:id", isAdmin, update);
+api.delete("/:id", isAdmin, remove);
 
 export default api;
