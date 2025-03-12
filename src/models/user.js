@@ -1,4 +1,5 @@
 import { Schema, model } from "mongoose";
+import { timingSafeEqual } from "crypto";
 
 import { hashPassword } from "#utils";
 
@@ -34,6 +35,13 @@ schema.pre("save", function (next) {
   };
 
   next();
+});
+
+schema.method("verifyPassword", function (password) {
+  const [savedSalt, savedHash] = this.password.split(".");
+  const { hash: attemptHash } = hashPassword(password, savedSalt);
+
+  return timingSafeEqual(Buffer.from(attemptHash), Buffer.from(savedHash));
 });
 
 const Model = model("User", schema);

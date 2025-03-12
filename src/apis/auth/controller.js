@@ -2,20 +2,18 @@ import jwt from "jsonwebtoken";
 
 import { User } from "#models";
 
-import { hashPassword } from "#utils";
-
 export default async function(req, res) {
   let { email, password } = req.body;
   email = email.toLowerCase();
+
+  const emailRegex = /^[^\s]+\@[a-zA-Z0-9\.\-\_]+\.[a-zA-Z]{2,}$/;
+  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[\W\_]).{8,}$/;
 
   if (!email || !password) {
     return res
       .status(400)
       .end();
   };
-
-  const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w]{2,}$/;
-  const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
 
   if (!emailRegex.test(email) || !passwordRegex.test(password)) {
     return res
@@ -26,10 +24,7 @@ export default async function(req, res) {
   let user = await User.findOne({ email });
 
   if (user) {
-    const [savedSalt, savedHash] = user.password.split(".");
-    const { hash: attemptHash } = hashPassword(password, savedSalt);
-
-    if (attemptHash != savedHash) {
+    if (!user.verifyPassword(password)) {
       return res
         .status(400)
         .end();
