@@ -2,16 +2,12 @@ import { Router } from "express";
 
 import { isAdmin } from "#middlewares";
 
-import {
-  create,
-  update,
-  remove
-} from "./controller.js";
+import { create, edit, remove } from "./controller.js";
 
 const api = Router();
 
 api.post("/", isAdmin, create);
-api.put("/:id", isAdmin, update);
+api.put("/:id", isAdmin, edit);
 api.delete("/:id", isAdmin, remove);
 
 export default api;

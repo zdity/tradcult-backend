@@ -18,11 +18,18 @@ async function create(req, res) {
     .end();
 };
 
-async function update(req, res) {
+async function edit(req, res) {
   const id = req.params.id;
+
   const { name } = req.body;
 
-  if (!id || !name) {
+  if (!id) {
+    return res
+      .status(400)
+      .end();
+  };
+
+  if (!name) {
     return res
       .status(400)
       .end();
@@ -61,8 +68,4 @@ async function remove(req, res) {
     .end();
 };
 
-export {
-  create,
-  update,
-  remove
-};
+export { create, edit, remove };

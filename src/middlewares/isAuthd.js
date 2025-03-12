@@ -5,11 +5,12 @@ export default function (condition) {
     const token = req.headers.authorization;
 
     try {
-      jwt.verify(token, process.env.JWT_SECRET, {
+      const { _id } = jwt.verify(token, process.env.JWT_SECRET, {
         algorithms: ["HS256"]
       });
 
       if (condition) {
+        req.user = { _id };
         return next();
       };
 
