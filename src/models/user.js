@@ -28,8 +28,10 @@ const schema = new Schema({
 });
 
 schema.pre("save", function (next) {
-  const { salt, hash } = hashPassword(this.password);
-  this.password = `${salt}.${hash}`;
+  if (this.isModified("password")) {
+    const { salt, hash } = hashPassword(this.password);
+    this.password = `${salt}.${hash}`;
+  };
 
   next();
 });
