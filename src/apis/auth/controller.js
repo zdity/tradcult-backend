@@ -4,7 +4,7 @@ import { User } from "#models";
 
 export default async function(req, res) {
   let { email, password } = req.body;
-  email = email.toLowerCase();
+  email = email?.toLowerCase();
 
   const emailRegex = /^[^\s]+\@[a-zA-Z0-9\.\-\_]+\.[a-zA-Z]{2,}$/;
   const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[\W\_]).{8,}$/;
