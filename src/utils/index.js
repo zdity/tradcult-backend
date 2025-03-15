@@ -1,5 +1,3 @@
 import hashPassword from "./hashPassword.js";
 
-export {
-  hashPassword
-};
+export { hashPassword };

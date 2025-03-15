@@ -4,27 +4,16 @@ import { timingSafeEqual } from "crypto";
 import { hashPassword } from "#utils";
 
 const schema = new Schema({
-  email: {
-    type: String,
-    required: true
-  },
-  password: {
-    type: String,
-    required: true
-  },
-  role: {
-    type: String
-  },
+  email: { type: String, required: true },
+  password: { type: String, required: true },
+  role: { type: String },
   cart: [{
     product: {
       type: Schema.Types.ObjectId,
       ref: "Product",
       required: true
     },
-    quantity: {
-      type: Number,
-      default: 1
-    }
+    quantity: { type: Number, default: 1 }
   }]
 });
 
