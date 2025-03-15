@@ -3,36 +3,56 @@ import jwt from "jsonwebtoken";
 import { User } from "#models";
 
 export default async function(req, res) {
-  let { email, password } = req.body;
-  email = email?.toLowerCase();
+  const { id, password } = req.body;
 
   const emailRegex = /^[^\s]+\@[a-zA-Z0-9\.\-\_]+\.[a-zA-Z]{2,}$/;
+  const phoneRegex = /^[0-9]{10}$/
   const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[\W\_]).{8,}$/;
 
-  if (!email || !password) {
+  let email, phone;
+  let user;
+
+  if (!id || !password) {
     return res
       .status(400)
       .end();
   };
 
-  if (!emailRegex.test(email) || !passwordRegex.test(password)) {
-    return res
-      .status(400)
-      .end();
-  };
+  if (emailRegex.test(id)) {
+    email = id.toLowerCase();
 
-  let user = await User.findOne({ email });
-
-  if (user) {
-    if (!user.verifyPassword(password)) {
-      return res
-        .status(400)
-        .end();
-    };
+  } else if (phoneRegex.test(id)) {
+    phone = Number(id);
 
   } else {
+    return res
+      .status(400)
+      .end();
+  };
+
+  if (!passwordRegex.test(password)) {
+    return res
+      .status(400)
+      .end();
+  };
+
+  if (email) {
+    user = await User.findOne({ email });
+
+  } else {
+    user = await User.findOne({ phone });
+  };
+
+  if (user && !user.verifyPassword(password)) {
+    return res
+      .status(400)
+      .end();
+  };
+
+  if (!user) {
     user = await User.create({
       email,
+      phone,
       password
     });
   };

@@ -4,7 +4,8 @@ import { timingSafeEqual } from "crypto";
 import { hashPassword } from "#utils";
 
 const schema = new Schema({
-  email: { type: String, required: true },
+  email: { type: String },
+  phone: { type: Number },
   password: { type: String, required: true },
   role: { type: String },
   cart: [{
