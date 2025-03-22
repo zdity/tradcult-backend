@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 
 import { User } from "#models";
 
-export default async function(req, res) {
+export default async function (req, res) {
   const { id, password } = req.body;
 
   const emailRegex = /^[^\s]+\@[a-zA-Z0-9\.\-\_]+\.[a-zA-Z]{2,}$/;
@@ -20,9 +20,11 @@ export default async function(req, res) {
 
   if (emailRegex.test(id)) {
     email = id.toLowerCase();
+    user = await User.findOne({ email });
 
   } else if (phoneRegex.test(id)) {
-    phone = Number(id);
+    phone = id;
+    user = await User.findOne({ phone });
 
   } else {
     return res
@@ -36,25 +38,17 @@ export default async function(req, res) {
       .end();
   };
 
-  if (email) {
-    user = await User.findOne({ email });
-
-  } else {
-    user = await User.findOne({ phone });
-  };
-
-  if (user && !user.verifyPassword(password)) {
-    return res
-      .status(400)
-      .end();
-  };
-
   if (!user) {
     user = await User.create({
       email,
       phone,
       password
     });
+
+  } else if (!user.verifyPassword(password)) {
+    return res
+      .status(400)
+      .end();
   };
 
   const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
