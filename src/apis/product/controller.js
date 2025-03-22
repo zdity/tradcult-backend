@@ -1,6 +1,6 @@
 import { Product } from "#models";
 
-async function add(req, res) {
+async function create(req, res) {
   const { name, description, price, categoryId } = req.body;
 
   if (!name || !price || !categoryId) {
@@ -21,7 +21,7 @@ async function add(req, res) {
     .end();
 };
 
-async function edit(req, res) {
+async function update(req, res) {
   const id = req.params.id;
 
   const { name, description, price, categoryId } = req.body;
@@ -66,4 +66,4 @@ async function remove(req, res) {
     .end();
 };
 
-export { add, edit, remove };
+export { create, update, remove };

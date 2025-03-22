@@ -18,7 +18,7 @@ async function create(req, res) {
     .end();
 };
 
-async function edit(req, res) {
+async function update(req, res) {
   const id = req.params.id;
 
   const { name } = req.body;
@@ -68,4 +68,4 @@ async function remove(req, res) {
     .end();
 };
 
-export { create, edit, remove };
+export { create, update, remove };

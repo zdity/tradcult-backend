@@ -26,7 +26,7 @@ async function add(req, res) {
     .end();
 };
 
-async function edit(req, res) {
+async function update(req, res) {
   const userId = req.user._id;
   const itemIndex = req.params.index;
 
@@ -92,4 +92,4 @@ async function remove(req, res) {
     .end();
 };
 
-export { add, edit, remove };
+export { add, update, remove };
