@@ -5,7 +5,7 @@ import { add, update, remove } from "./controller.js";
 const api = Router();
 
 api.post("/", add);
-api.put("/:index", update);
-api.delete("/:index", remove);
+api.patch("/:id", update);
+api.delete("/:id", remove);
 
 export default api;

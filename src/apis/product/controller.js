@@ -1,49 +1,23 @@
 import { Product } from "#models";
 
 async function create(req, res) {
-  const { name, description, price, categoryId } = req.body;
+  const { name, price, category } = req.body;
 
-  if (!name || !price || !categoryId) {
+  if (!name || !price || !category) {
     return res
       .status(400)
       .end();
   };
 
-  await Product.create({
-    name,
-    description,
-    price,
-    category: categoryId
-  });
+  await Product.create(req.body);
 
   return res
-    .status(200)
+    .status(201)
     .end();
 };
 
 async function update(req, res) {
-  const id = req.params.id;
-
-  const { name, description, price, categoryId } = req.body;
-
-  if (!id) {
-    return res
-      .status(400)
-      .end();
-  };
-
-  if (!name || !price || !categoryId) {
-    return res
-      .status(400)
-      .end();
-  };
-
-  await Product.updateOne({ _id: id }, {
-    name,
-    description,
-    price,
-    category: categoryId
-  });
+  await Product.updateOne({ _id: req.params.id }, req.body);
 
   return res
     .status(200)
@@ -51,15 +25,7 @@ async function update(req, res) {
 };
 
 async function remove(req, res) {
-  const id = req.params.id;
-
-  if (!id) {
-    return res
-      .status(400)
-      .end();
-  };
-
-  await Product.deleteOne({ _id: id });
+  await Product.deleteOne({ _id: req.params.id });
 
   return res
     .status(200)

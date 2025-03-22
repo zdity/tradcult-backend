@@ -1,4 +1,4 @@
-import { Category } from "#models";
+import { Category, Product } from "#models";
 
 async function create(req, res) {
   const { name } = req.body;
@@ -9,35 +9,15 @@ async function create(req, res) {
       .end();
   };
 
-  await Category.create({
-    name
-  });
+  await Category.create(req.body);
 
   return res
-    .status(200)
+    .status(201)
     .end();
 };
 
 async function update(req, res) {
-  const id = req.params.id;
-
-  const { name } = req.body;
-
-  if (!id) {
-    return res
-      .status(400)
-      .end();
-  };
-
-  if (!name) {
-    return res
-      .status(400)
-      .end();
-  };
-
-  await Category.updateOne({ _id: id }, {
-    name
-  });
+  await Category.updateOne({ _id: req.params.id }, req.body);
 
   return res
     .status(200)
@@ -45,23 +25,15 @@ async function update(req, res) {
 };
 
 async function remove(req, res) {
-  const id = req.params.id;
+  const products = await Product.find({ category: req.params.id });
 
-  if (!id) {
+  if (products) {
     return res
       .status(400)
       .end();
   };
 
-  const hasProducts = await Product.findOne({ category: id });
-
-  if (hasProducts) {
-    return res
-      .status(400)
-      .end();
-  };
-
-  await Category.deleteOne({ _id: id });
+  await Category.deleteOne({ _id: req.params.id });
 
   return res
     .status(200)

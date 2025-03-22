@@ -7,7 +7,7 @@ import { create, update, remove } from "./controller.js";
 const api = Router();
 
 api.post("/", isAdmin, create);
-api.put("/:id", isAdmin, update);
+api.patch("/:id", isAdmin, update);
 api.delete("/:id", isAdmin, remove);
 
 export default api;

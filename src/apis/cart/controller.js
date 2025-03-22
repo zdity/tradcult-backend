@@ -1,92 +1,57 @@
 import { Product, User } from "#models";
 
 async function add(req, res) {
-  const userId = req.user._id;
+  const { product } = req.body;
 
-  const { productId, quantity } = req.body;
-
-  if (!productId || !await Product.exists({ _id: productId })) {
+  if (!product || !await Product.exists({ _id: product })) {
     return res
       .status(400)
       .end();
   };
 
-  const user = await User.findOne({ _id: userId });
+  await User.updateOne(
+    { _id: req.user._id },
+    { $push: { cart: req.body } }
+  );
 
-  user.cart.push({
-    id: user.cart.length,
-    product: productId,
-    quantity
-  });
-
-  await user.save();
-  
   return res
     .status(200)
     .end();
 };
 
 async function update(req, res) {
-  const userId = req.user._id;
-  const itemIndex = req.params.index;
+  const user = await User.findOne({ _id: req.user._id });
+  const index = user.cart.findIndex(item => item._id == req.params.id);
 
-  const { quantity } = req.body;
-
-  const user = await User.findOne({ _id: userId });
-  const item = user.cart.find((item, index) => {
-    if (index == itemIndex) {
-      return item;
-    };
-
-    return null;
-  });
-
-  if (!item) {
+  if (index == -1) {
     return res
       .status(400)
       .end();
   };
 
-  if (!quantity) {
-    return res
-      .status(400)
-      .end();
-  };
-
-  Object.assign(user.cart[itemIndex], {
-    quantity
-  });
-
+  Object.assign(user.cart[index], req.body);
   await user.save();
-  
+
   return res
     .status(200)
     .end();
 };
 
 async function remove(req, res) {
-  const userId = req.user._id;
-  const itemIndex = req.params.index;
+  const user = await User.findOne({ _id: req.user._id });
+  const index = user.cart.findIndex(item => item._id == req.params.id);
 
-  const user = await User.findOne({ _id: userId });
-  const item = user.cart.find((item, index) => {
-    if (index == itemIndex) {
-      return item;
-    };
-
-    return null;
-  });
-
-  if (!item) {
+  if (index == -1) {
     return res
       .status(400)
       .end();
   };
 
-  user.cart = user.cart.filter((_, index) => index != itemIndex);
+  await User.updateOne(
+    { _id: req.user._id },
+    { $pull: { cart: { _id: req.params.id } } }
+  );
 
-  await user.save();
-  
   return res
     .status(200)
     .end();
