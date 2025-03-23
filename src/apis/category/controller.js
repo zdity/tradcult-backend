@@ -9,7 +9,9 @@ async function create(req, res) {
       .end();
   };
 
-  await Category.create(req.body);
+  await Category.create({
+    name
+  });
 
   return res
     .status(201)
@@ -17,7 +19,17 @@ async function create(req, res) {
 };
 
 async function update(req, res) {
-  await Category.updateOne({ _id: req.params.id }, req.body);
+  const { name } = req.body;
+
+  const { matchedCount } = await Category.updateOne({ _id: req.params.id }, {
+    name
+  });
+
+  if (matchedCount == 0) {
+    return res
+      .status(400)
+      .end();
+  };
 
   return res
     .status(200)
@@ -27,13 +39,19 @@ async function update(req, res) {
 async function remove(req, res) {
   const products = await Product.find({ category: req.params.id });
 
-  if (products) {
+  if (products.length == 0) {
     return res
       .status(400)
       .end();
   };
 
-  await Category.deleteOne({ _id: req.params.id });
+  const { deletedCount } = await Category.deleteOne({ _id: req.params.id });
+
+  if (deletedCount == 0) {
+    return res
+      .status(400)
+      .end();
+  };
 
   return res
     .status(200)

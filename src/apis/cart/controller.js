@@ -1,7 +1,7 @@
 import { Product, User } from "#models";
 
 async function add(req, res) {
-  const { product } = req.body;
+  const { product, quantity } = req.body;
 
   if (!product || !await Product.exists({ _id: product })) {
     return res
@@ -11,7 +11,14 @@ async function add(req, res) {
 
   await User.updateOne(
     { _id: req.user._id },
-    { $push: { cart: req.body } }
+    {
+      $push: {
+        cart: {
+          product,
+          quantity
+        }
+      }
+    }
   );
 
   return res
@@ -20,6 +27,8 @@ async function add(req, res) {
 };
 
 async function update(req, res) {
+  const { quantity } = req.body;
+
   const user = await User.findOne({ _id: req.user._id });
   const index = user.cart.findIndex(item => item._id == req.params.id);
 
@@ -29,7 +38,9 @@ async function update(req, res) {
       .end();
   };
 
-  Object.assign(user.cart[index], req.body);
+  Object.assign(user.cart[index], {
+    quantity
+  });
   await user.save();
 
   return res
@@ -38,19 +49,16 @@ async function update(req, res) {
 };
 
 async function remove(req, res) {
-  const user = await User.findOne({ _id: req.user._id });
-  const index = user.cart.findIndex(item => item._id == req.params.id);
+  const { matchedCount } = await User.updateOne(
+    { _id: req.user._id },
+    { $pull: { cart: { _id: req.params.id } } }
+  );
 
-  if (index == -1) {
+  if (matchedCount == 0) {
     return res
       .status(400)
       .end();
   };
-
-  await User.updateOne(
-    { _id: req.user._id },
-    { $pull: { cart: { _id: req.params.id } } }
-  );
 
   return res
     .status(200)

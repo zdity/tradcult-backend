@@ -1,7 +1,7 @@
 import { Product } from "#models";
 
 async function create(req, res) {
-  const { name, price, category } = req.body;
+  const { name, description, price, category } = req.body;
 
   if (!name || !price || !category) {
     return res
@@ -9,7 +9,12 @@ async function create(req, res) {
       .end();
   };
 
-  await Product.create(req.body);
+  await Product.create({
+    name,
+    description,
+    price,
+    category
+  });
 
   return res
     .status(201)
@@ -17,7 +22,20 @@ async function create(req, res) {
 };
 
 async function update(req, res) {
-  await Product.updateOne({ _id: req.params.id }, req.body);
+  const { name, description, price, category } = req.body;
+
+  const { matchedCount } = await Product.updateOne({ _id: req.params.id }, {
+    name,
+    description,
+    price,
+    category
+  });
+
+  if (matchedCount == 0) {
+    return res
+      .status(400)
+      .end();
+  };
 
   return res
     .status(200)
@@ -25,7 +43,13 @@ async function update(req, res) {
 };
 
 async function remove(req, res) {
-  await Product.deleteOne({ _id: req.params.id });
+  const { deletedCount } = await Product.deleteOne({ _id: req.params.id });
+
+  if (deletedCount == 0) {
+    return res
+      .status(400)
+      .end();
+  };
 
   return res
     .status(200)
