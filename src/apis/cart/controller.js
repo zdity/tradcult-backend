@@ -49,12 +49,12 @@ async function update(req, res) {
 };
 
 async function remove(req, res) {
-  const { matchedCount } = await User.updateOne(
+  const { modifiedCount } = await User.updateOne(
     { _id: req.user._id },
     { $pull: { cart: { _id: req.params.id } } }
   );
 
-  if (matchedCount == 0) {
+  if (modifiedCount == 0) {
     return res
       .status(400)
       .end();
