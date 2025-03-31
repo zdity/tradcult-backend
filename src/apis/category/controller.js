@@ -52,9 +52,7 @@ async function update(req, res) {
 
 async function remove(req, res) {
   try {
-    const products = await Product.find({ category: req.params.id });
-
-    if (products.length != 0) {
+    if (await Product.exists({ category: req.params.id })) {
       return res
         .status(400)
         .end();
