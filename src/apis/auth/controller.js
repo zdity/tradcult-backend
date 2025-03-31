@@ -18,9 +18,11 @@ export default async function (req, res) {
 
   if (emailRegex.test(id)) {
     email = id.toLowerCase();
+    user = await User.findOne({ email });
 
   } else if (phoneRegex.test(id)) {
     phone = id;
+    user = await User.findOne({ phone });
 
   } else {
     return res
@@ -35,8 +37,6 @@ export default async function (req, res) {
   };
 
   try {
-    user = await User.findOne({ $or: [{ email }, { phone }] });
-
     if (!user) {
       user = await User.create({
         email,
