@@ -9,6 +9,7 @@ export default async function (req, res, next) {
     const { _id } = jwt.verify(token, process.env.JWT_SECRET, {
       algorithms: ["HS256"]
     });
+
     const user = await User.findOne({ _id });
 
     if (user.role == "admin") {
