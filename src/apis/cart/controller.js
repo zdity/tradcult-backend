@@ -5,32 +5,22 @@ async function add(req, res) {
 
   try {
     if (!product || !(await Product.exists({ _id: product }))) {
-      return res
-        .status(400)
-        .end();
+      return res.status(400).end();
     };
 
-    await User.updateOne(
-      { _id: req.user._id },
-      {
-        $push: {
-          cart: {
-            product,
-            quantity
-          }
+    await User.updateOne({ _id: req.user._id }, {
+      $push: {
+        cart: {
+          product,
+          quantity
         }
       }
-    );
-
+    });
   } catch {
-    return res
-      .status(500)
-      .end();
+    return res.status(500).end();
   };
 
-  return res
-    .status(200)
-    .end();
+  return res.status(200).end();
 };
 
 async function update(req, res) {
@@ -41,26 +31,18 @@ async function update(req, res) {
     const index = user.cart.findIndex(item => item._id == req.params.id);
 
     if (index == -1) {
-      return res
-        .status(400)
-        .end();
+      return res.status(400).end();
     };
 
     Object.assign(user.cart[index], {
       quantity
     });
-
     await user.save();
-
   } catch {
-    return res
-      .status(500)
-      .end();
+    return res.status(500).end();
   };
 
-  return res
-    .status(200)
-    .end();
+  return res.status(200).end();
 };
 
 async function remove(req, res) {
@@ -71,20 +53,13 @@ async function remove(req, res) {
     );
 
     if (modifiedCount == 0) {
-      return res
-        .status(400)
-        .end();
+      return res.status(400).end();
     };
-
   } catch {
-    return res
-      .status(500)
-      .end();
+    return res.status(500).end();
   };
 
-  return res
-    .status(200)
-    .end();
+  return res.status(200).end();
 };
 
 export { add, update, remove };
