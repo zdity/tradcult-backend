@@ -3,6 +3,10 @@ import { Product, User } from "#models";
 async function add(req, res) {
   const { product, quantity } = req.body;
 
+  if (typeof quantity == "number" && quantity % 1 == 0  && quantity < 0) {
+    return res.status(400).end();
+  };
+
   try {
     if (!product || !(await Product.exists({ _id: product }))) {
       return res.status(400).end();
@@ -25,6 +29,10 @@ async function add(req, res) {
 
 async function update(req, res) {
   const { quantity } = req.body;
+
+  if (typeof quantity == "number" && quantity % 1 == 0  && quantity < 0) {
+    return res.status(400).end();
+  };
 
   try {
     const user = await User.findOne({ _id: req.user._id });

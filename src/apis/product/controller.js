@@ -3,7 +3,7 @@ import { Category, Product } from "#models";
 async function create(req, res) {
   const { name, description, price, category } = req.body;
 
-  if (!name || !price || !category) {
+  if (!name || (typeof price != "number" || price < 0) || !category) {
     return res.status(400).end();
   };
 
@@ -27,6 +27,10 @@ async function create(req, res) {
 
 async function update(req, res) {
   const { name, description, price, category } = req.body;
+
+  if (typeof price == "number" && price < 0) {
+    return res.status(400).end();
+  };
 
   try {
     if (category && !(await Category.exists({ _id: category }))) {
