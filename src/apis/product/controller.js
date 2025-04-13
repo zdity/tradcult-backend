@@ -28,8 +28,10 @@ async function create(req, res) {
 async function update(req, res) {
   const { name, description, price, category } = req.body;
 
-  if (typeof price == "number" && price < 0) {
-    return res.status(400).end();
+  if (price !== undefined) {
+    if (typeof price != "number" || price < 0) {
+      return res.status(400).end();
+    };
   };
 
   try {
