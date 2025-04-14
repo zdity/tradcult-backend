@@ -1,9 +1,11 @@
 import { Category, Product } from "#models";
 
 async function create(req, res) {
-  const { name, description, price, category } = req.body;
+  const { name, description, price, category, stock } = req.body;
 
-  if (!name || (typeof price != "number" || price < 0) || !category) {
+  if (!name || price === undefined || !category || stock === undefined) {
+    return res.status(400).end();
+  } else if (!isPriceValid(price) || !isStockValid(stock)) {
     return res.status(400).end();
   };
 
@@ -16,7 +18,8 @@ async function create(req, res) {
       name,
       description,
       price,
-      category
+      category,
+      stock
     });
   } catch {
     return res.status(500).end();
@@ -26,12 +29,12 @@ async function create(req, res) {
 };
 
 async function update(req, res) {
-  const { name, description, price, category } = req.body;
+  const { name, description, price, category, stock } = req.body;
 
-  if (price !== undefined) {
-    if (typeof price != "number" || price < 0) {
+  if (price !== undefined && !isPriceValid(price)) {
       return res.status(400).end();
-    };
+  } else if (stock !== undefined && !isStockValid(stock)) {
+      return res.status(400).end();
   };
 
   try {
@@ -68,6 +71,14 @@ async function remove(req, res) {
   };
 
   return res.status(200).end();
+};
+
+function isPriceValid(price) {
+  return Number.isFinite(price) && price > 0;
+};
+
+function isStockValid(stock) {
+  return Number.isInteger(stock) && stock > 0;
 };
 
 export { create, update, remove };
