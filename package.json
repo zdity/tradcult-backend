@@ -1,13 +1,12 @@
 {
   "type": "module",
   "imports": {
-    "#config/*": "./config/*",
-    "#models": "./src/models/index.js",
     "#middlewares": "./src/middlewares/index.js",
+    "#models": "./src/models/index.js",
     "#utils": "./src/utils/index.js"
   },
   "scripts": {
-    "dev": "node --watch ./src/index.js"
+    "dev": "node --watch ./server.js"
   },
   "dependencies": {
     "dotenv": "^16.4.5",
