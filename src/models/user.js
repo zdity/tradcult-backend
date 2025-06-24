@@ -15,6 +15,17 @@ const schema = new Schema({
       required: true
     },
     quantity: { type: Number, default: 1 }
+  }],
+  addresses: [{
+    name: { type: String, required: true },
+    phone: { type: String, required: true },
+    address: { type: String, required: true },
+    pincode: { type: String, required: true }
+  }],
+  orders: [{
+    type: Schema.Types.ObjectId,
+    ref: "Order",
+    required: true
   }]
 });
 
