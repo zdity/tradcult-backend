@@ -5,6 +5,8 @@ async function create(req, res) {
 
   if (!name || price === undefined || !category || stock === undefined) {
     return res.status(400).end();
+  } else if (description !== undefined && typeof description != "string") {
+    return res.status(400).end();
   } else if (!isPriceValid(price) || !isStockValid(stock)) {
     return res.status(400).end();
   };
@@ -31,7 +33,11 @@ async function create(req, res) {
 async function update(req, res) {
   const { name, description, price, category, stock } = req.body;
 
-  if (price !== undefined && !isPriceValid(price)) {
+  if (name !== undefined && typeof name != "string") {
+    return res.status(400).end();
+  } else if (description !== undefined && typeof description != "string") {
+    return res.status(400).end();
+  } else if (price !== undefined && !isPriceValid(price)) {
       return res.status(400).end();
   } else if (stock !== undefined && !isStockValid(stock)) {
       return res.status(400).end();

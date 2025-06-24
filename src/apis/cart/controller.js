@@ -3,14 +3,10 @@ import { Product, User } from "#models";
 async function add(req, res) {
   const { product, quantity } = req.body;
 
-  if (!product) {
+  if (!product || quantity === undefined) {
     return res.status(400).end();
-  };
-
-  if (quantity !== undefined) {
-    if (typeof quantity != "number" || quantity % 1 != 0  || quantity < 1) {
-      return res.status(400).end();
-    };
+  } else if (!isQuantityValid(quantity)) {
+    return res.status(400).end();
   };
 
   try {
@@ -36,10 +32,8 @@ async function add(req, res) {
 async function update(req, res) {
   const { quantity } = req.body;
 
-  if (quantity !== undefined) {
-    if (typeof quantity != "number" || quantity % 1 != 0  || quantity < 1) {
-      return res.status(400).end();
-    };
+  if (quantity !== undefined && !isQuantityValid(quantity)) {
+    return res.status(400).end();
   };
 
   try {
@@ -76,6 +70,10 @@ async function remove(req, res) {
   };
 
   return res.status(200).end();
+};
+
+function isQuantityValid(quantity) {
+  return typeof quantity == "number" && quantity % 1 == 0  && quantity > 0;
 };
 
 export { add, update, remove };

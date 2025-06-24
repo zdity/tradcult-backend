@@ -21,6 +21,10 @@ async function create(req, res) {
 async function update(req, res) {
   const { name } = req.body;
 
+  if (name !== undefined && typeof name != "string") {
+    return res.status(400).end();
+  };
+
   try {
     const { matchedCount } = await Category.updateOne({ _id: req.params.id }, {
       name
