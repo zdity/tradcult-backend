@@ -3,9 +3,11 @@ import { Product, User } from "#models";
 async function add(req, res) {
   const { product, quantity } = req.body;
 
-  if (!product || quantity === undefined) {
+  if (!product) {
     return res.status(400).end();
-  } else if (!isQuantityValid(quantity)) {
+  };
+
+  if (quantity !== undefined && !isQuantityValid(quantity)) {
     return res.status(400).end();
   };
 

@@ -5,9 +5,11 @@ async function create(req, res) {
 
   if (!name || price === undefined || !category || stock === undefined) {
     return res.status(400).end();
-  } else if (description !== undefined && typeof description != "string") {
-    return res.status(400).end();
   } else if (!isPriceValid(price) || !isStockValid(stock)) {
+    return res.status(400).end();
+  };
+
+  if (description !== undefined && typeof description != "string") {
     return res.status(400).end();
   };
 
