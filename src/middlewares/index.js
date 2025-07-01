@@ -1,4 +1,4 @@
-import isAuthd from "./isAuthd.js";
+import isAuth from "./isAuth.js";
 import isAdmin from "./isAdmin.js";
 
-export { isAuthd, isAdmin };
+export { isAuth, isAdmin };

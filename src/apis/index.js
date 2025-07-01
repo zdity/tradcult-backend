@@ -1,6 +1,6 @@
 import { Router, json } from "express";
 
-import { isAuthd } from "#middlewares";
+import { isAuth } from "#middlewares";
 
 import auth from "./auth/routes.js"
 import category from "./category/routes.js"
@@ -14,6 +14,6 @@ apis.use(json());
 apis.use("/auth", auth);
 apis.use("/category", category);
 apis.use("/product", product);
-apis.use("/cart", isAuthd(true), cart);
+apis.use("/cart", isAuth(), cart);
 
 export default apis;

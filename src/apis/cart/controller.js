@@ -49,6 +49,7 @@ async function update(req, res) {
     Object.assign(user.cart[index], {
       quantity
     });
+
     await user.save();
   } catch {
     return res.status(500).end();

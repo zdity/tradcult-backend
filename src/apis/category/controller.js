@@ -49,9 +49,7 @@ async function remove(req, res) {
     const { deletedCount } = await Category.deleteOne({ _id: req.params.id });
 
     if (deletedCount == 0) {
-      return res
-        .status(400)
-        .end();
+      return res.status(400).end();
     };
   } catch {
     return res.status(500).end();

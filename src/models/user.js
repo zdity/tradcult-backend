@@ -30,10 +30,6 @@ const schema = new Schema({
 });
 
 schema.pre("save", function (next) {
-  if (!this.email && !this.password) {
-    throw new Error();
-  };
-
   if (this.isModified("password")) {
     const { salt, hash } = hashPassword(this.password);
     this.password = `${salt}.${hash}`;

@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 
-export default function (condition) {
+export default function (condition = true) {
   return function (req, res, next) {
     try {
       const { _id } = jwt.verify(
