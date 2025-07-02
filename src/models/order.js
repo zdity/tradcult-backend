@@ -1,6 +1,11 @@
 import { Schema, model } from "mongoose";
 
 const schema = new Schema({
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
+    required: true
+  },
   items: [{
     product: {
       type: Schema.Types.ObjectId,
@@ -29,13 +34,13 @@ const schema = new Schema({
     },
     status: {
       type: String,
-      enum: ["pending", "paid", "failed", "refunded"],
-      default: "pending"
+      enum: ["unpaid", "paid", "failed", "refunded"],
+      required: true
     }
   },
   status: {
     type: String,
-    enum: ["pending", "shipped", "delivered", "updated", "cancelled"],
+    enum: ["pending", "shipped", "delivered", "updated", "canceled"],
     default: "pending"
   },
   created: { type: Date, default: Date.now },
