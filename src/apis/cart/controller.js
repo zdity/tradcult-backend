@@ -46,8 +46,10 @@ async function update(req, res) {
       return res.status(400).end();
     };
 
-    Object.assign(user.cart[index], {
-      quantity
+    const updates = [ quantity ];
+
+    updates.forEach(update => {
+      if (update) user.cart[index][update] = update;
     });
 
     await user.save();

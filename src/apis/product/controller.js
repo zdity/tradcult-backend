@@ -54,7 +54,8 @@ async function update(req, res) {
       name,
       description,
       price,
-      category
+      category,
+      stock
     });
 
     if (matchedCount == 0) {
@@ -86,7 +87,7 @@ function isPriceValid(price) {
 };
 
 function isStockValid(stock) {
-  return Number.isInteger(stock) && stock > 0;
+  return Number.isInteger(stock) && stock >= 0;
 };
 
 export { create, update, remove };
