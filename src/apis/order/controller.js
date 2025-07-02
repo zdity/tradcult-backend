@@ -3,7 +3,7 @@ import { User, Order } from "#models";
 async function create(req, res) {
   const { addressId, paymentMethod } = req.body;
   let paymentStatus = "unpaid";
-  // todo: address and payment
+  // todo: payment
 
   try {
     const user = await User.findOne({ _id: req.user._id }).populate("cart.product");
@@ -24,7 +24,7 @@ async function create(req, res) {
 
     if (addressIndex == -1) {
       return res.status(400).end();
-    };
+    }
 
     const address = user.addresses[addressIndex];
 

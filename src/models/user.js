@@ -20,7 +20,8 @@ const schema = new Schema({
     name: { type: String, required: true },
     phone: { type: String, required: true },
     address: { type: String, required: true },
-    pincode: { type: String, required: true }
+    pincode: { type: String, required: true },
+    default: { type: Boolean }
   }],
   orders: [{
     type: Schema.Types.ObjectId,
