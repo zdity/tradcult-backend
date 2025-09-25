@@ -47,7 +47,7 @@ const schema = new Schema({
   shipped: { type: Date },
   delivered: { type: Date },
   updated: { type: Date },
-  cancelled: { type: Date }
+  canceled: { type: Date }
 });
 
 const Model = model("Order", schema);

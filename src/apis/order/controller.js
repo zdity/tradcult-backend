@@ -8,13 +8,15 @@ async function create(req, res) {
   try {
     const user = await User.findOne({ _id: req.user._id }).populate("cart.product");
 
-    const items = user.cart.map(item => {
-      return {
-	product: item.product._id,
-	snapshot: item.product,
-	quantity: item.quantity
-      }
-    });
+    const items = user.cart
+      .filter(item => item != null)
+      .map(item => {
+	return {
+	  product: item.product._id,
+	  snapshot: item.product,
+	  quantity: item.quantity
+	}
+      });
 
     const total = user.cart.reduce((sum, item) => {
       return sum + item.product.price * item.quantity;
@@ -82,6 +84,7 @@ async function cancel(req, res) {
     }
 
     order.status = "canceled";
+    order.canceled = Date.now();
 
     await order.save();
 
